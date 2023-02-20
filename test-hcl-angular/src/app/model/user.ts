@@ -1,3 +1,4 @@
+//Data structure
 export interface User {
   isSelected: boolean;
   id: number;
@@ -10,6 +11,7 @@ export interface User {
   isEdit: boolean;
 }
 
+//Defining data validation and type
 export const UserColumns = [
   {
     key: 'isSelected',
@@ -21,6 +23,7 @@ export const UserColumns = [
     type: 'text',
     label: 'Name',
     required: true,
+    pattern: '^[A-Za-z]+$',
   },
   {
     key: 'state',
@@ -31,21 +34,28 @@ export const UserColumns = [
     key: 'zip',
     type: 'text',
     label: 'Zip',
+    required: true,
+    maxlength: 5,
   },
   {
     key: 'amount',
-    type: 'text',
+    type: 'number',
     label: 'Amount',
+    required: true,
+    step: 0.01,
   },
   {
     key: 'qty',
-    type: 'text',
+    type: 'number',
     label: 'Qty',
+    required: true,
   },
   {
     key: 'item',
     type: 'text',
     label: 'Item',
+    required: true,
+    pattern: '^[a-zA-Z0-9]+$',
   },
   {
     key: 'isEdit',

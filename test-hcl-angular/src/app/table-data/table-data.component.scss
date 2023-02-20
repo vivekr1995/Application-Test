@@ -1,0 +1,34 @@
+p {
+    font-family: Lato;
+}
+table {
+    width: 90%;
+    margin: auto;
+    margin-top: 25px;
+}
+.btn-edit {
+    text-align: right;
+}
+h2 {
+    text-align: center;
+    padding-top: 20px;
+}
+.button-remove {
+    color: red;
+}  
+::ng-deep .mat-form-field-infix {
+    width: 100% !important;
+}
+.form-input {
+    padding-right: 5px;
+}
+.filter {
+    width: 90%;
+    margin: auto;
+    display: table;
+    margin-bottom: -23px;
+    color: black;
+}
+.filter-text {
+    color: grey;
+}

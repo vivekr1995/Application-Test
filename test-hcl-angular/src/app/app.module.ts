@@ -10,6 +10,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { HttpClientModule } from '@angular/common/http';
+import { TableDataComponent } from './table-data/table-data.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   imports: [
@@ -22,8 +25,10 @@ import { HttpClientModule } from '@angular/common/http';
     MatCheckboxModule,
     MatDialogModule,
     HttpClientModule,
+    MatSnackBarModule,
+    MatSortModule,
   ],
-  declarations: [AppComponent, ConfirmDialogComponent],
+  declarations: [AppComponent, ConfirmDialogComponent, TableDataComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table'
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component'
 import { User, UserColumns } from './model/user'
 import { UserService } from './services/user.service'
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
@@ -11,34 +12,22 @@ import { UserService } from './services/user.service'
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  displayedColumns: string[] = UserColumns.map((col) => col.key)
-  columnsSchema: any = UserColumns
-  dataSource = new MatTableDataSource<User>()
-  valid: any = {}
+  dataSource = new MatTableDataSource<User>();
 
-  constructor(public dialog: MatDialog, private userService: UserService) {}
+  constructor(public dialog: MatDialog, private userService: UserService, public snackBar : MatSnackBar) {}
 
   ngOnInit() {
+    this.resetData();
+  }
+
+  //Reseting data
+  resetData() {
     this.userService.getUsers().subscribe((res: any) => {
-      this.dataSource.data = res
+      this.dataSource.data = res;
     })
   }
 
-  editRow(row: User) {
-    if (row.id === 0) {
-      this.userService.addUser(row).subscribe((newUser: User) => {
-        row.id = newUser.id
-        row.isEdit = false
-
-        this.userService.getUsers().subscribe((res: any) => {
-          this.dataSource.data = res
-        })
-      })
-    } else {
-      this.userService.updateUser(row).subscribe(() => (row.isEdit = false))
-    }
-  }
-
+  //Showing field for new entry
   addRow() {
     const newRow: User = {
       id: 0,
@@ -54,14 +43,7 @@ export class AppComponent {
     this.dataSource.data = [newRow, ...this.dataSource.data]
   }
 
-  removeRow(id: number) {
-    this.userService.deleteUser(id).subscribe(() => {
-      this.dataSource.data = this.dataSource.data.filter(
-        (u: User) => u.id !== id,
-      )
-    })
-  }
-
+  //Removing multiple selected data from table
   removeSelectedRows() {
     const users = this.dataSource.data.filter((u: User) => u.isSelected)
     this.dialog
@@ -74,36 +56,13 @@ export class AppComponent {
               (u: User) => !u.isSelected,
             )
           })
+
+          this.snackBar.open('Data removed successfully', 'Deleted', {
+            duration : 2000,
+            panelClass : ['mat-toolbar', 'mat-primary']
+          });
         }
       })
   }
 
-  inputHandler(e: any, id: number, key: string) {
-    if (!this.valid[id]) {
-      this.valid[id] = {}
-    }
-    this.valid[id][key] = e.target.validity.valid
-  }
-
-  disableSubmit(id: number) {
-    if (this.valid[id]) {
-      return Object.values(this.valid[id]).some((item) => item === false)
-    }
-    return false
-  }
-
-  isAllSelected() {
-    return this.dataSource.data.every((item) => item.isSelected)
-  }
-
-  isAnySelected() {
-    return this.dataSource.data.some((item) => item.isSelected)
-  }
-
-  selectAll(event: any) {
-    this.dataSource.data = this.dataSource.data.map((item) => ({
-      ...item,
-      isSelected: event.checked,
-    }))
-  }
 }
