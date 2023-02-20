@@ -180,7 +180,12 @@ class Application implements User {
 			}
 
 			//Writing file
-			$res = $this->writeCSV($newdata);
+			try {
+				$res = $this->writeCSV($newdata, 'edit');
+			}
+			catch(Exception $e) {
+				echo 'Message: ' .$e->getMessage();
+			  }
 		} else {
 			//Data not found
 			$res['data'] = [];
@@ -233,7 +238,7 @@ class Application implements User {
 		return $res;
 	}
 
-	public function writeCSV($data) {
+	public function writeCSV($data, $type='') {
 		//Writing file
 		$f = fopen($this->filename, 'w');
 		if ($f === false) {
@@ -242,6 +247,10 @@ class Application implements User {
 			$res['status'] = FALSE;
 			$res['message'] = 'Error opening the file ' . $this->filename;
 			$res['code'] = 404;
+
+			if($type == 'edit') {
+				throw new Exception("Error opening the file");
+			} 
 		} else {
 			//Writing data in blank file
 			foreach ($data as $row) {
@@ -254,6 +263,7 @@ class Application implements User {
 			$res['message'] = '';
 			$res['code'] = 200;
 		}
+		
 		return $res;
 	}
 
