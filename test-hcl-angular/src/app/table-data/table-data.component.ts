@@ -1,6 +1,6 @@
 import { Component, DefaultIterableDiffer, Input, OnInit, Output, EventEmitter } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
-import { User, UserColumns } from '../model/user'
+import { User, UserColumns } from '../interface/userData'
 import { UserService } from '../services/user.service'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sort } from '@angular/material/sort';
@@ -62,17 +62,24 @@ export class TableDataComponent {
 
                 if(is_unique) {
                     //Adding new entry
-                    this.userService.addUser(row).subscribe((newUser: User) => {
-                        row.id = newUser.id
-                        row.isEdit = false
-            
+                    this.userService.addUser(row).subscribe((response: any) => {
+                      if(response.success) {
+                        this.snackBar.open('Data added successfully', 'Added', {
+                          duration : 2000,
+                          panelClass : ['mat-toolbar', 'mat-primary']
+                        });
+
                         this.resetItem();
+                      } else {
+                        this.snackBar.open('Data add failed', 'Failed', {
+                          duration : 2000,
+                          panelClass : ['mat-toolbar', 'mat-warn']
+                        });
+                      }
+                        
                     })
                     //Success message
-                    this.snackBar.open('Data added successfully', 'Added', {
-                        duration : 2000,
-                        panelClass : ['mat-toolbar', 'mat-primary']
-                    });
+                    
                 } else {
                     //Showing error message
                     this.is_disabled = true;
@@ -85,25 +92,41 @@ export class TableDataComponent {
         }
     } else {
         //Updating existing data
-        this.userService.updateUser(row).subscribe(() => (row.isEdit = false))
-
-        this.snackBar.open('Data updated successfully', 'Edited', {
-            duration : 2000,
-            panelClass : ['mat-toolbar', 'mat-primary']
-        });
+        this.userService.updateUser(row).subscribe((response: any) => {
+          if(response.success) {
+            this.snackBar.open('Data updated successfully', 'Updated', {
+              duration : 2000,
+              panelClass : ['mat-toolbar', 'mat-primary']
+            });
+            this.resetItem();
+          } else {
+            this.snackBar.open('Data update failed', 'Failed', {
+              duration : 2000,
+              panelClass : ['mat-toolbar', 'mat-warn']
+            });
+          }
+        })
     }
   }
 
   //Single data delete
   removeRow(id: number) {
-    this.userService.deleteUser(id).subscribe(() => {
+    this.userService.deleteUser(id).subscribe((response: any) => {
+      if(response.success) {
         this.dataSource.data = this.dataSource.data.filter(
-            (u: User) => u.id !== id,
+          (u: User) => u.id !== id,
         )
         this.snackBar.open('Data removed successfully', 'Deleted', {
             duration : 2000,
             panelClass : ['mat-toolbar', 'mat-primary']
         });
+      } else {
+        this.snackBar.open('Data remove failed', 'Failed', {
+          duration : 2000,
+          panelClass : ['mat-toolbar', 'mat-warn']
+        });
+      }
+        
     })
   }
 

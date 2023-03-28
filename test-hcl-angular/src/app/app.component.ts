@@ -2,7 +2,7 @@ import { Component, DefaultIterableDiffer, OnInit } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { MatTableDataSource } from '@angular/material/table'
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component'
-import { User, UserColumns } from './model/user'
+import { User, UserColumns } from './interface/userData'
 import { UserService } from './services/user.service'
 import { MatSnackBar } from '@angular/material/snack-bar';
 

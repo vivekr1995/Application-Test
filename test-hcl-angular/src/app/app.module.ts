@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { TableDataComponent } from './table-data/table-data.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { MatSortModule } from '@angular/material/sort';
     HttpClientModule,
     MatSnackBarModule,
     MatSortModule,
+    MatIconModule,
   ],
   declarations: [AppComponent, ConfirmDialogComponent, TableDataComponent],
   bootstrap: [AppComponent],
