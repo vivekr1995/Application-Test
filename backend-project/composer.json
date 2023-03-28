@@ -1,0 +1,26 @@
+{
+    "name": "vivek/backend-project",
+    "description": "php api backend",
+    "type": "project",
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vivek\\BackendProject\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "vivekr1995",
+            "email": "vivekramesh1821995@gmail.com"
+        }
+    ],
+    "require": {
+        "monolog/monolog": "2.5.0"
+    },
+    "config": {
+    
+            "platform-check": false
+    }
+}
