@@ -6,6 +6,9 @@ table {
     margin: auto;
     margin-top: 25px;
 }
+th {
+    height: 70px;
+}
 .btn-edit {
     text-align: right;
 }
@@ -13,8 +16,17 @@ h2 {
     text-align: center;
     padding-top: 20px;
 }
+.button-done {
+    color: #6dee6d;
+    font-size: 16px;
+}
+.button-edit {
+    color: #31d1fd;
+    font-size: 16px;
+}
 .button-remove {
     color: red;
+    font-size: 16px;
 }  
 ::ng-deep .mat-form-field-infix {
     width: 100% !important;
@@ -33,4 +45,20 @@ h2 {
     color: red;
     font-size: large;
     font-weight: 500;
+    padding-right: 40px !important;
+}
+tr th {
+    font-size: 18px;
+    color: white;
+}
+.mat-row:nth-child(even){
+    background-color: #84809b;
+}
+.mat-row:nth-child(odd){
+    background-color: #706b91;
+}
+.mat-paginator {
+    width: 90%;
+    margin: auto;
+    background: #838080;
 }

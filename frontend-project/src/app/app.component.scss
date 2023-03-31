@@ -1,3 +1,13 @@
+header, footer {
+  height: 60px;
+}
+.mat-card {
+  background: #f4f2f2;
+  margin: 0px 40px;
+}
+.mat-card-content {
+  margin-bottom: 25px !important;
+}
 .table-header {
   width: 90%;
   margin: auto;
@@ -8,16 +18,21 @@
   justify-content: space-between;
   padding-top: 10px;
 }
-  
 .button-add-row {
   background: #1b9e1b;
   color: #ffffff;
+  margin-right: 5px;
 }
-
 .button-remove-rows {
   background: red;
   color: #ffffff;
-  margin-right: 5px;
 }
-  
-  
+.col {
+  flex: 1 0 0%;
+}
+.heading {
+  font-weight: 500;
+  color: #27211f;
+  font-size: 2rem;
+  margin: auto;
+}

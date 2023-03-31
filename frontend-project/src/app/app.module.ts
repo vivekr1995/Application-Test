@@ -14,6 +14,8 @@ import { TableDataComponent } from './table-data/table-data.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
+import {MatCardModule} from '@angular/material/card';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -29,6 +31,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatSnackBarModule,
     MatSortModule,
     MatIconModule,
+    MatCardModule,
+    MatPaginatorModule,
   ],
   declarations: [AppComponent, ConfirmDialogComponent, TableDataComponent],
   bootstrap: [AppComponent],

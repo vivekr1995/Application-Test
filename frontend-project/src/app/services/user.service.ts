@@ -9,10 +9,15 @@ import { retry, catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class UserService {
-  //API Urls
-  // private apiUrl = 'http://localhost/test-hcl-php/api';
+  /**
+   * Declaring Backend API URL
+   */
   private apiUrl = 'http://localhost/backend-project/';
 
+  /**
+   * Creates instance
+   * @param http 
+   */
   constructor(private http: HttpClient) {}
   
   /**
@@ -26,22 +31,38 @@ export class UserService {
       .pipe(retry(1), catchError(this.handleError));
   }
 
-  //To Update single data row
-  updateUser(user: User): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}`, user);
-  }
-
-  //Adds new entry in CSV
+  /**
+   * Adds new entry in CSV
+   * @param user 
+   * @returns User 
+   */
   addUser(user: User): Observable<User> {
     return this.http.post<User>(`${this.apiUrl}`, user);
   }
 
-  //To delete single entry from CSV
+  /**
+   * To Update single data row
+   * @param user 
+   * @returns User 
+   */
+  updateUser(user: User): Observable<User> {
+    return this.http.patch<User>(`${this.apiUrl}`, user);
+  }
+
+  /**
+   * To delete single entry from CSV
+   * @param id 
+   * @returns User 
+   */
   deleteUser(id: number): Observable<User> {
     return this.http.delete<User>(`${this.apiUrl}${id}`);
   }
 
-  //To delete multiple selected data from CSV
+  /**
+   * To delete multiple selected data from CSV
+   * @param id 
+   * @returns User 
+   */
   deleteUsers(users: User[]): Observable<User[]> {
     return forkJoin(
       users.map((user) =>
@@ -50,7 +71,11 @@ export class UserService {
     );
   }
 
-  //Exception handler
+  /**
+   * Exception handler
+   * @param error
+   * @returns Error message 
+   */
   handleError(error:any) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {

@@ -1,19 +1,6 @@
-export interface Csvdata {
-  success: boolean;
-  data?: (DataEntity)[] | null;
-}
-export interface DataEntity {
-  id: number;
-  name: string;
-  state: string;
-  zip: number;
-  amount: number;
-  qty: number;
-  item: string
-}
-
-
-//Data structure
+/**
+ * Data structure defined here
+ */
 export interface User {
   isSelected: boolean;
   id: number;
@@ -26,7 +13,9 @@ export interface User {
   isEdit: boolean;
 }
 
-//Defining data validation and type
+/**
+ * Defining data validation and type
+ */
 export const UserColumns = [
   {
     key: 'isSelected',

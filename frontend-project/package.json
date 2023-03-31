@@ -1,5 +1,5 @@
 {
-  "name": "test-hcl-angular",
+  "name": "frontend-project",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",

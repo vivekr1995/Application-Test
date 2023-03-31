@@ -1,0 +1,29 @@
+<header></header>
+
+<mat-card>
+  <mat-card-content>
+    <article class="table-header row">
+      <div class="col">
+      </div>
+      <div class="col" style="text-align: center;">
+        <h1 class="heading">Application Test</h1>
+      </div>
+      <div class="col">
+        <!-- To add new data -->
+        <button class="button-add-row btn" mat-button (click)="addRow()">
+          <span class="btn-text">Add Row <mat-icon class="search-icon">add</mat-icon></span>
+        </button>
+        <!-- To delete selected multiple data -->
+        <button class="button-remove-rows btn" mat-button (click)="removeSelectedRows()">
+          <span class="btn-text">Remove Rows <mat-icon class="search-icon">delete</mat-icon></span>
+        </button>
+      </div>
+    </article>
+
+    <!-- Appending child component to parent -->
+    <table-data [dataSource]="dataSource" (reset)="resetData();"></table-data>
+
+  </mat-card-content>
+</mat-card>
+
+<footer></footer>

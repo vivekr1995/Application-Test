@@ -1,35 +1,34 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { AppComponent } from './app.component';
+import { TableDataComponent } from './table-data.component';
 
-describe('AppComponent', () => {
+describe('TableDataComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
       ],
       declarations: [
-        AppComponent
+        TableDataComponent
       ],
     }).compileComponents();
   });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+    const fixture = TestBed.createComponent(TableDataComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'test-hcl-angular'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
+  it(`should have as title 'frontend-project'`, () => {
+    const fixture = TestBed.createComponent(TableDataComponent);
     const app = fixture.componentInstance;
-    // expect(app.title).toEqual('test-hcl-angular');
   });
 
   it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+    const fixture = TestBed.createComponent(TableDataComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('test-hcl-angular app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('frontend-project app is running!');
   });
 });
