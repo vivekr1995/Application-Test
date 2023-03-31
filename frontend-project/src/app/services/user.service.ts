@@ -4,15 +4,17 @@ import { forkJoin, Observable, throwError } from 'rxjs';
 import { User } from '../interface/userData';
 import { map } from 'rxjs/operators';
 import { retry, catchError } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  
   /**
-   * Declaring Backend API URL
+   * Getting data from environment
    */
-  private apiUrl = 'http://localhost/backend-project/';
+  apiUrl = environment.apiUrl;
 
   /**
    * Creates instance
