@@ -27,7 +27,11 @@ h2 {
 .button-remove {
     color: red;
     font-size: 16px;
-}  
+}
+.button-cancel{
+    color: orange;
+    font-size: 16px;
+}
 ::ng-deep .mat-form-field-infix {
     width: 100% !important;
 }

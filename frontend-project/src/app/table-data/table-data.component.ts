@@ -1,4 +1,4 @@
-import { Component, DefaultIterableDiffer, Input, OnInit, Output, EventEmitter, ViewChild, AfterViewInit  } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { User, UserColumns } from '../interface/userData';
 import { UserService } from '../services/user.service';
@@ -158,6 +158,15 @@ export class TableDataComponent {
           })
         }
     })
+  }
+
+  /**
+   * Cancel add or edit actions
+   * @param row
+   * @return {void} returns nothing
+   */
+  cancelAddEditRow(row: User) {
+    this.resetItem();
   }
 
   /**

@@ -47,6 +47,9 @@
             <button mat-button class="button-done btn" (click)="editRow(element)" [disabled]="disableSubmit(element.id) || is_disabled">
               <span class="btn-text">Done</span>
             </button>
+            <button mat-button class="button-cancel btn" (click)="cancelAddEditRow(element)">
+              <span class="btn-text">Cancel</span>
+            </button>
           </div>
           <mat-form-field class="form-input" *ngSwitchDefault>
             <input
