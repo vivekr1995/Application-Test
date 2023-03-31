@@ -4,7 +4,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { User, UserColumns } from './interface/userData';
 import { UserService } from './services/user.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
@@ -16,14 +15,14 @@ export class AppComponent {
    * Defining table data structure
    */
   dataSource = new MatTableDataSource<User>();
+  pageNumber = 5;
 
   /**
    * Creates an instance of app component.
    * @param dialog
    * @param userService
-   * @param snackBar
    */
-  constructor(public dialog: MatDialog, private userService: UserService, public snackBar : MatSnackBar) {}
+  constructor(public dialog: MatDialog, private userService: UserService) {}
 
   /**
    * Sets table data on load
@@ -51,6 +50,7 @@ export class AppComponent {
    * @return {void} returns nothing
    */
   addRow() {
+    this.pageNumber = 5;
     const newRow: User = {
       id: 0,
       name: '',
@@ -87,18 +87,14 @@ export class AppComponent {
             )
           })
 
-          this.snackBar.open('Data removed successfully', 'Deleted', {
-            duration : 2000,
-            panelClass : ['mat-toolbar', 'mat-primary']
-          });
+          this.userService.showSuccessMessage('Data removed successfully', 'Deleted');
+          
         }
       })
     } else {
       // Shows error messages
-      this.snackBar.open('Select any data', 'No data selected', {
-        duration : 2000,
-        panelClass : ['mat-toolbar', 'mat-warn']
-      });
+      this.userService.showErrorMessage('Select any data', 'No data selected!');
+      
     }
     
   }

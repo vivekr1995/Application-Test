@@ -2,7 +2,6 @@ import { Component, DefaultIterableDiffer, Input, OnInit, Output, EventEmitter, 
 import { MatTableDataSource } from '@angular/material/table';
 import { User, UserColumns } from '../interface/userData';
 import { UserService } from '../services/user.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
@@ -20,6 +19,7 @@ export class TableDataComponent {
   /**
    * get dataSource data from parent component
    */
+  @Input() pageNumber : any;
   @Input() dataSource = new MatTableDataSource<User>();
   @Output() reset = new EventEmitter<boolean>();
 
@@ -33,10 +33,9 @@ export class TableDataComponent {
   /**
    * Creates an instance of table component.
    * @param userService
-   * @param snackBar
    * @param dialog
    */
-  constructor(private userService: UserService, public snackBar : MatSnackBar, public dialog: MatDialog) {
+  constructor(private userService: UserService, public dialog: MatDialog) {
     this.sortedData = this.dataSource.data.slice();
   }
 
@@ -72,10 +71,8 @@ export class TableDataComponent {
             this.is_disabled = true;
 
             // Showing error message
-            this.snackBar.open('The required fields could not Blank!', 'Required', {
-                duration : 2000,
-                panelClass : ['mat-toolbar', 'mat-warn']
-            });
+            this.userService.showErrorMessage('The required fields could not Blank', 'Required!');
+            
         } else {
             if(this.dataSource.data) {
                 var is_unique = true;
@@ -92,19 +89,14 @@ export class TableDataComponent {
                       if(response.success) {
 
                         // Showing success message
-                        this.snackBar.open('Data added successfully', 'Added', {
-                          duration : 2000,
-                          panelClass : ['mat-toolbar', 'mat-primary']
-                        });
+                        this.userService.showSuccessMessage('Data added successfully', 'Added');
 
                         // Table Data reseting after success
                         this.resetItem();
                       } else {
                         // Data add faled message showing
-                        this.snackBar.open('Data add failed', 'Failed', {
-                          duration : 2000,
-                          panelClass : ['mat-toolbar', 'mat-warn']
-                        });
+                        this.userService.showErrorMessage('Data add failed', 'Failed!');
+                        
                       }
                         
                     })
@@ -112,10 +104,8 @@ export class TableDataComponent {
                 } else {
                     //Showing error message
                     this.is_disabled = true;
-                    this.snackBar.open('Item should be unique', 'Not Unique', {
-                        duration : 2000,
-                        panelClass : ['mat-toolbar', 'mat-warn']
-                    });
+                    this.userService.showErrorMessage('Item should be unique', 'Not Unique!');
+                    
                 }
             }
         }
@@ -124,17 +114,13 @@ export class TableDataComponent {
         this.userService.updateUser(row).subscribe((response: any) => {
           if(response.success) {
             // Showing update success message and data resetting
-            this.snackBar.open('Data updated successfully', 'Updated', {
-              duration : 2000,
-              panelClass : ['mat-toolbar', 'mat-primary']
-            });
+            this.userService.showSuccessMessage('Data updated successfully', 'Updated');
+            
             this.resetItem();
           } else {
             // Showing update failed message
-            this.snackBar.open('Data update failed', 'Failed', {
-              duration : 2000,
-              panelClass : ['mat-toolbar', 'mat-warn']
-            });
+            this.userService.showErrorMessage('Data update failed', 'Failed!');
+            
           }
         })
     }
@@ -162,15 +148,11 @@ export class TableDataComponent {
               this.dataSource.data = this.dataSource.data.filter(
                 (u: User) => u.id !== id,
               )
-              this.snackBar.open('Data removed successfully', 'Deleted', {
-                  duration : 2000,
-                  panelClass : ['mat-toolbar', 'mat-primary']
-              });
+              this.userService.showSuccessMessage('Data removed successfully', 'Deleted');
+              
             } else {
-              this.snackBar.open('Data remove failed', 'Failed', {
-                duration : 2000,
-                panelClass : ['mat-toolbar', 'mat-warn']
-              });
+              this.userService.showErrorMessage('Data remove failed', 'Failed!');
+              
             }
               
           })
@@ -186,6 +168,7 @@ export class TableDataComponent {
    * @return {void} returns nothing
    */
   inputHandler(e: any, id: number, key: string) {
+    
     this.is_disabled = false;
     if (!this.valid[id]) {
       this.valid[id] = {}

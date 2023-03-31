@@ -5,6 +5,7 @@ import { User } from '../interface/userData';
 import { map } from 'rxjs/operators';
 import { retry, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,7 @@ export class UserService {
    * Creates instance
    * @param http 
    */
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, public snackBar : MatSnackBar) {}
   
   /**
    * Gets csv data - To get all existing data from CSV
@@ -89,6 +90,32 @@ export class UserService {
     }
     return throwError(() => {
         return errorMessage;
+    });
+  }
+
+  /**
+   * Shows success message after add, delete update actions
+   * @param message
+   * @param title
+   * @return {void} returns nothing
+   */
+  showSuccessMessage(message : string, title : string) {
+    this.snackBar.open(message, title, {
+      duration : 2000,
+      panelClass : ['mat-toolbar', 'mat-primary']
+    });
+  }
+
+  /**
+   * Shows error message after add, delete update actions
+   * @param message
+   * @param title
+   * @return {void} returns nothing
+   */
+  showErrorMessage(message : string, title : string) {
+    this.snackBar.open(message, title, {
+      duration : 2000,
+      panelClass : ['mat-toolbar', 'mat-warn']
     });
   }
 }
