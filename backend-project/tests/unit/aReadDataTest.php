@@ -1,7 +1,7 @@
 <?php
-define('APPROOT', __DIR__ . '/../../src/'); // APPROOT contains the root path of the project
+define('APPROOT', __DIR__ . '/../../'); // APPROOT contains the root path of the project
 
-require __DIR__ . "/../../src/Controllers/UserController.php"; // include the class for the unit test cases
+require __DIR__ . "/../../app.php"; // include the class for the unit test cases
 
 /**
  * readDataTest

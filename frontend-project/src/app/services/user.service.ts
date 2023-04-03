@@ -69,7 +69,7 @@ export class UserService {
   deleteUsers(users: User[]): Observable<User[]> {
     return forkJoin(
       users.map((user) =>
-        this.http.delete<User>(`${this.apiUrl}/${user.id}`)
+        this.http.delete<User>(`${this.apiUrl}${user.id}`)
       )
     );
   }

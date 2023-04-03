@@ -8,7 +8,7 @@ export const environment = {
   /**
    * Declaring Backend API URL
    */
-  apiUrl : 'http://localhost/backend-project/'
+  apiUrl : 'http://localhost/backend-project/api/'
 };
 
 /*
