@@ -2,7 +2,7 @@ import { Component, DefaultIterableDiffer, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
-import { User, UserColumns } from './interface/userData';
+import { User } from './interface/userData';
 import { UserService } from './services/user.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class AppComponent {
    * Defining table data structure
    */
   dataSource = new MatTableDataSource<User>();
-  pageNumber = 5;
+  title: string = 'GreenIT Application Challenge';
 
   /**
    * Creates an instance of app component.
@@ -39,7 +39,7 @@ export class AppComponent {
    * @return {void} returns nothing
    */
   resetData() {
-    this.userService.getUsers().subscribe((res: any) => {
+    this.userService.getUsers().subscribe((res : User[]) => {
       this.dataSource.data = res;
     })
   }
@@ -50,7 +50,6 @@ export class AppComponent {
    * @return {void} returns nothing
    */
   addRow() {
-    this.pageNumber = 5;
     const newRow: User = {
       id: 0,
       name: '',

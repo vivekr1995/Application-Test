@@ -6,7 +6,7 @@
       <div class="col">
       </div>
       <div class="col" style="text-align: center;">
-        <h1 class="heading">Application Test</h1>
+        <h1 class="heading">{{title}}</h1>
       </div>
       <div class="col">
         <!-- To add new data -->
@@ -21,7 +21,7 @@
     </article>
 
     <!-- Appending child component to parent -->
-    <table-data [pageNumber]="pageNumber" [dataSource]="dataSource" (reset)="resetData();"></table-data>
+    <table-data [dataSource]="dataSource" (reset)="resetData();"></table-data>
 
   </mat-card-content>
 </mat-card>

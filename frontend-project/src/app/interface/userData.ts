@@ -33,13 +33,16 @@ export const UserColumns = [
     key: 'state',
     type: 'text',
     label: 'State',
+    required: true,
+    pattern: '^[A-Za-z]+$',
   },
   {
     key: 'zip',
     type: 'text',
     label: 'Zip',
     required: true,
-    maxlength: 5,
+    maxlength: 6,
+    pattern: '^[0-9]*$',
   },
   {
     key: 'amount',

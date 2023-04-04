@@ -13,18 +13,17 @@ import { MatPaginator} from '@angular/material/paginator';
   styleUrls: ['./table-data.component.scss'],
 })
 export class TableDataComponent {
-  displayedColumns: string[] = UserColumns.map((col) => col.key)
-  columnsSchema: any = UserColumns
+  displayedColumns: string[] = UserColumns.map((col) => col.key);
+  columnsSchema: any = UserColumns;
 
   /**
    * get dataSource data from parent component
    */
-  @Input() pageNumber : any;
   @Input() dataSource = new MatTableDataSource<User>();
   @Output() reset = new EventEmitter<boolean>();
 
-  valid: any = {}
-  is_disabled = false;
+  valid: any = {};
+  is_disabled: boolean = false;
   sortedData: User[];
 
   // Get paginator from view
@@ -180,7 +179,7 @@ export class TableDataComponent {
     
     this.is_disabled = false;
     if (!this.valid[id]) {
-      this.valid[id] = {}
+      this.valid[id] = {};
     }
     this.valid[id][key] = e.target.validity.valid;
   }

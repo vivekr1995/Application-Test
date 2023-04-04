@@ -9,12 +9,12 @@ table {
 th {
     height: 70px;
 }
+tr th {
+    font-size: 18px;
+    color: white;
+}
 .btn-edit {
     text-align: right;
-}
-h2 {
-    text-align: center;
-    padding-top: 20px;
 }
 .button-done {
     color: #6dee6d;
@@ -28,7 +28,7 @@ h2 {
     color: red;
     font-size: 16px;
 }
-.button-cancel{
+.button-cancel {
     color: orange;
     font-size: 16px;
 }
@@ -50,10 +50,6 @@ h2 {
     font-size: large;
     font-weight: 500;
     padding-right: 40px !important;
-}
-tr th {
-    font-size: 18px;
-    color: white;
 }
 .mat-row:nth-child(even){
     background-color: #84809b;
