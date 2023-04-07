@@ -30,10 +30,10 @@ class readDataTest extends \Codeception\Test\Unit
      */
     public function testReadData()
     {
-        $dataCOntrollerbject = new UserController($this->csvFilePath);
+        $dataCOntrollerbject = new CsvOrderController($this->csvFilePath);
 
         //read data
-        $result = $dataCOntrollerbject->readUserData($this->csvFilePath);
+        $result = $dataCOntrollerbject->getCsvOrderData($this->csvFilePath);
 
         $this->assertIsArray($result, "returns array on success");
         $this->assertGreaterThanOrEqual(2, count($result)); // compare with number of array in csv file

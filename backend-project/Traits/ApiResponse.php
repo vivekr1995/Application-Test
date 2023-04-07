@@ -6,14 +6,14 @@ trait ApiResponse
 {
     
   /**
-   * successResponse
+   * getSuccessResponse
    *
    * @param  mixed $data
    * @param  mixed $status
    * @param  mixed $code
    * @return void
    */
-  public function successResponse($data, $status, $code)
+  public function getSuccessResponse($data, $status, $code)
   { 
     header("Content-type: application/json; charset=UTF-8");
     echo json_encode(['success' =>$status,'data' => $data], $code);
@@ -21,14 +21,14 @@ trait ApiResponse
 
   
   /**
-   * errorResponse
+   * getErrorResponse
    *
    * @param  mixed $message
    * @param  mixed $status
    * @param  mixed $code
    * @return void
    */
-  public function errorResponse($message,$status, $code)
+  public function getErrorResponse($message,$status, $code)
   {
     header("Content-type: application/json; charset=UTF-8");
     echo json_encode(['success' =>$status,'error' => $message, 'code' => $code], $code);

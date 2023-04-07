@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { forkJoin, Observable, throwError } from 'rxjs';
+import { forkJoin, Observable, throwError, map, retry, catchError } from 'rxjs';
 import { User } from '../interface/userData';
-import { map } from 'rxjs/operators';
-import { retry, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -102,7 +100,7 @@ export class UserService {
   showSuccessMessage(message : string, title : string) {
     this.snackBar.open(message, title, {
       duration : 2000,
-      panelClass : ['mat-toolbar', 'mat-primary']
+      panelClass : ['mat-toolbar', 'mat-success']
     });
   }
 

@@ -36,36 +36,36 @@ class deleteDataTest extends \Codeception\Test\Unit
     public function testDeleteTest()
     {
 
-        $userControllerObject = $this->createMock(UserController::class);
-        $userControllerObject->method("deleteUserData")->willReturn(true);
+        $csvOrderControllerObject = $this->createMock(CsvOrderController::class);
+        $csvOrderControllerObject->method("removeCsvOrderData")->willReturn(true);
 
-        $userControllerObject
+        $csvOrderControllerObject
         ->expects($this->once())
-        ->method("deleteUserData")
+        ->method("removeCsvOrderData")
         ->with(5);
 
-        $result = $userControllerObject->deleteUserData(5);
+        $result = $csvOrderControllerObject->removeCsvOrderData(5);
 
         $this->assertTrue($result);
     }
    
     /**
      * testDeleteFail
-     * If 0 is passed to deleteUserData funtion it will 
+     * If 0 is passed to removeCsvOrderData funtion it will 
      * Delete user data from csv file
      * @return void
      */
     public function testDeleteFail()
     {
-        $userControllerObject = $this->createMock(UserController::class);
-        $userControllerObject->method("deleteUserData")->willReturn(false);
+        $csvOrderControllerObject = $this->createMock(CsvOrderController::class);
+        $csvOrderControllerObject->method("removeCsvOrderData")->willReturn(false);
 
-        $userControllerObject
+        $csvOrderControllerObject
         ->expects($this->once())
-        ->method("deleteUserData")
+        ->method("removeCsvOrderData")
         ->with(0);
 
-        $result = $userControllerObject->deleteUserData(0);
+        $result = $csvOrderControllerObject->removeCsvOrderData(0);
 
         $this->assertFalse($result);
     }

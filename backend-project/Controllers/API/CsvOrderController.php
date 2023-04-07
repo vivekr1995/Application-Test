@@ -1,19 +1,11 @@
 <?php
 
-// define root path of application
-define('APPROOT', __DIR__ . '/');
-
-require APPROOT . "vendor/autoload.php"; // load packages installed from packages
-
-//Avoiding CORS origin error
-require_once 'header.php';
-
 //importing required files
-require_once(APPROOT . 'Interfaces/CsvUserData.php');
+require_once(APPROOT . 'Interfaces/OrderData.php');
 require_once(APPROOT . 'Traits/ApiResponse.php');
 
 //Interfaces and Traits
-use \Interfaces\CsvUserData;
+use \Interfaces\OrderData;
 use \Traits\ApiResponse;
 
 /**
@@ -24,7 +16,7 @@ use Monolog\Level;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
-class UserController implements CsvUserData {
+class CsvOrderController implements OrderData {
 
 	use ApiResponse;
 
@@ -46,88 +38,19 @@ class UserController implements CsvUserData {
         
         /**
          * Create object of Logger with channel-name Info
-         * Create object for StreamHandler to handle creating and writing logs into file
+         * To handle creating and writing logs into file
          */
         $this->logger = new Logger("info");
         $stream_handler = new StreamHandler(APPROOT . 'logs/app.log', Logger::DEBUG);
         $this->logger->pushHandler($stream_handler);
     }
 
-    /**
-     * Calling class methods based on GET, POST, PATCH and DELETE
-     * this acts as a route helps in directing to contoller functions
-     * based on request method.
-     * @param  string $method
-     * @return json data
-     */
-	public function requestNavigator($method)
-    {
-        if ($method === 'GET') {
-            return $this->successResponse(
-                $this->arrayToassociativeArray($this->readUserData()),
-                true, 200
-            );
-        } else if ($method === 'POST') {
-            $data = (array) json_decode(file_get_contents("php://input"), true);
-        
-            $errors = $this->validateData($data);
-            if (!empty($errors)) {
-                return $this->errorResponse($errors, false, 422);
-            }
-        
-            return $this->addUserData($data);
-        } else if ($method === 'PATCH') {
-            $data = (array) json_decode(file_get_contents("php://input"), true);
-        
-            $errors = $this->validateData($data);
-        
-            if (!empty($errors)) {
-                return $this->errorResponse(
-                    $errors, false
-                    , 422);
-            }
-        
-            return $this->updateUserData($data);
-        } else if ($method === 'DELETE') {
-            $parts = explode("/", $_SERVER["REQUEST_URI"]);
-            $id = $parts[3] ?? null;
-        
-            return $this->deleteUserData(intval($id));
-        } else {
-            http_response_code(405);
-            header("Allow: GET, POST");
-        }
-    }
-
 	/**
-     * arrayToassociativeArray
-     * combine header with associated data
-     * creates new array with header as key
-     * @param  array $data
-     * @return array
-     */
-    public function arrayToassociativeArray(array $data): array
-    {
-        $header = array_shift($data); // get first row / header
-        /*
-        Iterate through array and combine 
-        */
-        $result = array_map(function ($line) use ($header) {
-        $associativeArray = array_combine($header, $line); // combine both the array
-        return $associativeArray;
-        }, $data);
-    
-        return $result;
-    }
-
-	/**
-	 * readUserData
-	 * opens csv file in read mode
-	 * reads all the rows of csv and push into an array ,
-	 * then returns the array
+	 * getCsvOrderData
+	 * opens csv file in read mode and reads then returns an array
 	 * @return array
 	 */
-	public function readUserData(): array
+	public function getCsvOrderData(): array
 	{
 		try{
 			$csv = [];
@@ -138,34 +61,36 @@ class UserController implements CsvUserData {
 				}
 				fclose($handle);// after read is complete close the file
 			}else{
-				throw new Exception("Failed to open file in write mode");
+				throw new Exception("Failed to open csv file");
 			}
-			return $csv; 
+        
+            return $csv;
+
 		}catch(Exception $e){
 	
 			$response = $e->getMessage();
 			$this->logger->error($response);
 	
-			return $this->errorResponse(
+			return $this->getErrorResponse(
 				$response, false
 			 , 304);  
 		}
 	}
 
 	/**
-     * addUserData
+     * addCsvOrderData
      * read data from csv file , compare row-id with request id
      * push new array data along with existing array and write into csv file
      * @param  array $data
      * @return json
      */
-	public function addUserData(array $data) {
+	public function addCsvOrderData(array $data) {
 		try{
 
             if(empty($data)) throw new Exception("Order can not be empty"); // check if empty array
 
             //get the count of records in csv file including header
-            $getAllData = $this->readUserData($this->csvFilePath);
+            $getAllData = $this->getCsvOrderData();
             $num = count($getAllData);
     
             if(!array_key_exists("id", $data)){
@@ -185,10 +110,10 @@ class UserController implements CsvUserData {
             // Push new data to existing array
             array_push($getAllData, $data);
     
-            $result = $this->writeCSV($getAllData);
+            $result = $this->writeCSVFile($getAllData);
 
             if($result){
-                return $this->successResponse($result, true, 200);
+                return $this->getSuccessResponse($result, true, 200);
             }else{
                 throw new Exception("Failed to add data"); 
             }
@@ -198,24 +123,24 @@ class UserController implements CsvUserData {
             $response = $e->getMessage();
             $this->logger->error($response);
 
-            return $this->errorResponse(
+            return $this->getErrorResponse(
                 $response, false
              , 304);    
         }
 	}
 
 	/**
-     * updateUserData
+     * editCsvOrderData
      * read data from csv file , compare row-id with request id
      * re-write new array to selected row
      * @param  array $data
      * @return json
      */
-	public function updateUserData(array $data) {
+	public function editCsvOrderData(array $data) {
 		try{
 			//Getting ID
             $id = array_key_exists("id",$data) ? $data['id'] : 0 ;
-            $getAllData = $this->readUserData($this->csvFilePath);
+            $getAllData = $this->getCsvOrderData();
             $num = count($getAllData);
 
 			//Removing unwanted elements from new data
@@ -232,11 +157,11 @@ class UserController implements CsvUserData {
                 }
             }
     
-            $result = $this->writeCSV($getAllData);
+            $result = $this->writeCSVFile($getAllData);
 
             if($result){
 
-                return $this->successResponse(
+                return $this->getSuccessResponse(
                     $result,
                      true, 200
                 );
@@ -249,26 +174,25 @@ class UserController implements CsvUserData {
             $response = $e->getMessage();
             $this->logger->error($response);
  
-            return $this->errorResponse(
+            return $this->getErrorResponse(
                  $response, false
               , 304);   
         }
 	}
 
 	/**
-     * deleteUserData
-     * read data from csv file , compare row-id with request id
-     * splice/remove the array from existing order data
+     * removeCsvOrderData
+     * read data from csv file , compare row-id with request id and remove row data
      * @param  int $id
      * @return json
      */
-    public function deleteUserData($id) {
+    public function removeCsvOrderData($id) {
 
 		try{
             
             if ($id == 0) throw new Exception("Order delete Id should not be 0.");
 
-            $getAllData = $this->readUserData($this->csvFilePath);
+            $getAllData = $this->getCsvOrderData();
     
             $num = count($getAllData);
 
@@ -282,10 +206,10 @@ class UserController implements CsvUserData {
     
             }
     
-            $result = $this->writeCSV($getAllData);
+            $result = $this->writeCSVFile($getAllData);
 
             if($result){
-                return $this->successResponse($result, true, 200);
+                return $this->getSuccessResponse($result, true, 200);
             }else{
                 throw new Exception("Failed to delete order data");
             }
@@ -295,20 +219,20 @@ class UserController implements CsvUserData {
             $response = $e->getMessage();
             $this->logger->error($response);
 
-            return $this->errorResponse(
+            return $this->getErrorResponse(
                 $response, false
              , 304);   
         }
 	}
 
 	/**
-     * writeCSV
+     * writeCSVFile
      * Opens csv file in write mode 
      * writes array of data into csv file
      * @param  array $data
      * @return bool
      */
-    public function writeCSV(array $data): bool
+    public function writeCSVFile(array $data): bool
     {
         try { 
 
@@ -329,7 +253,7 @@ class UserController implements CsvUserData {
             $response = $e->getMessage();
             $this->logger->error($response);
 
-            return $this->errorResponse(
+            return $this->getErrorResponse(
                 $response, false
              , 304);            
         }
@@ -352,42 +276,35 @@ class UserController implements CsvUserData {
             $response = $e->getMessage();
             $this->logger->error($response);
 
-            return $this->errorResponse(
+            return $this->getErrorResponse(
                 $response, false
              , 304);
         }
     }
 
 	/**
-     * validateData
+     * validateInputData
      * checks if any field is mandatory or not
      * validate characters and numbers for each fields
      * @param  array $data
      * @return array
      */
-    public function validateData(array $data): array
+    public function validateInputData(array $data): array
     {
         $errors = []; // empty error array
 
         // destructuring array for fields
         ['id' => $id, 'name' => $name, 'state' => $state, 'zip' => $zip,
-         'amount' => $amount, 'qty' => $qty, 'item' => $item] = $data;
+         'amount' => $amount, 'quantity' => $quantity, 'item' => $item] = $data;
 
         if (!empty($data)) {
-
-            if (array_key_exists("id", $data)) {
-
-                if (filter_var($id, FILTER_VALIDATE_INT) === false) {
-                    $errors['id'] = "Id must be an integer";
-                }
-            }
 
             if (empty($name)) {
                 $errors['name'] = "Name is required";
             }else{
                 $name_regex = "/^[a-zA-Z ]+$/i";
                 if (!preg_match ($name_regex, $name) ) { 
-                    $errors['name'] = "Name must be in Letters";
+                    $errors['name'] = "Name must be in Letters.";
                 }
             }
 
@@ -396,7 +313,7 @@ class UserController implements CsvUserData {
             }else{
                 $state_regex = "/^[a-zA-Z ]+$/i";
                 if (!preg_match ($state_regex, $name) ) { 
-                    $errors['state'] = "State must be in Letters";
+                    $errors['state'] = "State must be in Letters.";
                 }
             }
 
@@ -405,7 +322,7 @@ class UserController implements CsvUserData {
             } else {
                 $zip_regex = "/^(?:\d{5,6})$/i"; 
                 if (!preg_match($zip_regex, $zip)) {
-                    $errors['zip'] = "ZipCode must be numbers and length must be 5 or 6 ";
+                    $errors['zip'] = "ZipCode must be 5 or 6 numbers.";
                 }
             }
 
@@ -413,15 +330,15 @@ class UserController implements CsvUserData {
                 $errors['amount'] = "Amount is required";
             } else {
                 if (filter_var($amount, FILTER_VALIDATE_FLOAT) === false) {
-                    $errors['amount'] = "Amount must be in decimal format e.g - 10.00";
+                    $errors['amount'] = "Amount must be in decimal.";
                 }
             }
 
-            if (empty($qty)) {
-                $errors['qty'] = "Quantity is required";
+            if (empty($quantity)) {
+                $errors['quantity'] = "Quantity is required";
             } else {
-                if (filter_var($qty, FILTER_VALIDATE_INT) === false) {
-                    $errors['qty'] = "Quantity must be in numbers";
+                if (filter_var($quantity, FILTER_VALIDATE_INT) === false) {
+                    $errors['quantity'] = "Quantity must be in numbers.";
                 }
             }
 
@@ -430,20 +347,10 @@ class UserController implements CsvUserData {
             }else{
                 $item_regex = "/^[a-zA-Z0-9]{3,10}$/";
                 if (!preg_match ($item_regex, $item) ) { 
-                    $errors['item'] = "Item must contain letters and numbers. Minimum length must be 2";
+                    $errors['item'] = "Item must contain letters and numbers.";
                 }
             }
         }
         return $errors;
     }
 }
-
-
-//Creating instance for the class
-$controller = new UserController(APPROOT . '/data.csv');
-
-/**
- * Function call based on GET, POST, PATCH and DELETE
- * this acts as a route helps in directing to contoller functions
- */
-$controller->requestNavigator($_SERVER['REQUEST_METHOD']);

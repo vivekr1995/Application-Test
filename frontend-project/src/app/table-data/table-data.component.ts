@@ -65,7 +65,7 @@ export class TableDataComponent {
     //New entry
     if (row.id === 0) {
         //Validating required data
-        if(row.name == '' || row.zip == '' || row.amount == '' || row.qty == '' || row.item == '') {
+        if(row.name == '' || row.zip == '' || row.amount == '' || row.quantity == '' || row.item == '') {
             //Button disabled and showing alert message
             this.is_disabled = true;
 
@@ -248,8 +248,8 @@ export class TableDataComponent {
           return compare(a.zip, b.zip, isAsc);
         case 'amount':
           return compare(a.amount, b.amount, isAsc);
-        case 'qty':
-          return compare(a.qty, b.qty, isAsc);
+        case 'quantity':
+          return compare(a.quantity, b.quantity, isAsc);
         case 'item':
           return compare(a.item, b.item, isAsc);
         default:

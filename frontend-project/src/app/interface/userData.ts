@@ -8,7 +8,7 @@ export interface User {
   state: string;
   zip: string;
   amount: string;
-  qty: string;
+  quantity: string;
   item: string;
   isEdit: boolean;
 }
@@ -52,9 +52,9 @@ export const UserColumns = [
     step: 0.01,
   },
   {
-    key: 'qty',
+    key: 'quantity',
     type: 'number',
-    label: 'Qty',
+    label: 'Quantity',
     required: true,
   },
   {

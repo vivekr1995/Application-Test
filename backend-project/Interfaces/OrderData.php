@@ -2,68 +2,59 @@
 
 namespace Interfaces;
 
-interface CsvUserData
+interface OrderData
 {
     /**
-     * arrayToassociativeArray
-     * combine header with associated data
-     * creates new array with header as key
-     * @param  array $data
-     * @return void
-     */
-    public function arrayToassociativeArray(array $data);
-
-    /**
-     * readUserData
+     * getCsvOrderData
      * opens csv file in read mode
      * reads all the rows of csv and push into an array ,
      * then returns the array
      * @return void
      */
-    public function readUserData();
+    public function getCsvOrderData();
 
     /**
-     * addUserData
+     * addCsvOrderData
      * read data from csv file , compare row-id with request id
      * push new array data exiting array and write into csv file
      * @param  array $data
      * @return void
      */
-    public function addUserData(array $data);
+    public function addCsvOrderData(array $data);
 
     /**
-     * updateUserData
+     * editCsvOrderData
      * read order data from csv file , compare row-id with with request id
      * re-assign new array to selected row
      * @param  array $data
      * @return void
      */
-    public function updateUserData(array $data);
+    public function editCsvOrderData(array $data);
 
     /**
-     * deleteUserData
+     * removeCsvOrderData
      * read data from csv file , compare row-id with request id
      * splice/remove the array from existing order data
      * @param  int $id
      * @return void
      */
-    public function deleteUserData(int $id);
+    public function removeCsvOrderData(int $id);
      
     /**
-     * writeCSV
+     * writeCSVFile
      * Operns csv file in write mode 
      * writes array of data into csv file
      * @param  array $data
      * @return void
      */
-    public function writeCSV(array $data);
+    public function writeCSVFile(array $data);
     
     /**
-     * validateData
+     * validateInputData
      * checks if any field is mandatory or not
      * validate characters and numbers for each fields
      * @param  array $data
      * @return void
      */
-    public function validateData(array $data);
+    public function validateInputData(array $data);
 }

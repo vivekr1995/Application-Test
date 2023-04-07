@@ -56,7 +56,7 @@ export class AppComponent {
       state: '',
       zip: '',
       amount: '',
-      qty: '',
+      quantity: '',
       item: '',
       isEdit: true,
       isSelected: false,
