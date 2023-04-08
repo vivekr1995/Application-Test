@@ -106,6 +106,7 @@ class CsvOrderController implements OrderData {
 			//Removing unwanted elements from new data
             unset($data["isEdit"]);
             unset($data["isSelected"]);
+            unset($data["success"]);
 
             // Push new data to existing array
             array_push($getAllData, $data);
@@ -146,6 +147,7 @@ class CsvOrderController implements OrderData {
 			//Removing unwanted elements from new data
             unset($data["isEdit"]);
             unset($data["isSelected"]);
+            unset($data["success"]);
 
             // Avoiding header data
             for($i = 1; $i < $num; $i++){

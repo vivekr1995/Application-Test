@@ -84,7 +84,7 @@ if (API_METHOD === 'GET') {
      * Gets data id from request
      */
     $parts = explode("/", $_SERVER["REQUEST_URI"]);
-    $id = $parts[3] ?? null;
+    $id = $parts[2] ?? null;
 
     /**
      * Remove row from the CSV file

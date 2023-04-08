@@ -36,3 +36,6 @@
 [2023-03-31T09:31:09.629148+00:00] info.ERROR: Order delete Id should not be 0. [] []
 [2023-03-31T10:46:16.999930+00:00] info.ERROR: Order delete Id should not be 0. [] []
 [2023-04-03T20:45:29.489166+00:00] info.ERROR: Length of array should not be 0. [] []
+[2023-04-08T08:47:08.126333+00:00] info.ERROR: Order delete Id should not be 0. [] []
+[2023-04-08T08:47:31.151635+00:00] info.ERROR: Order delete Id should not be 0. [] []
+[2023-04-08T08:48:04.035094+00:00] info.ERROR: Order delete Id should not be 0. [] []

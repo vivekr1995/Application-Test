@@ -1,11 +1,13 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { User, UserColumns } from '../interface/userData';
-import { UserService } from '../services/user.service';
+import { OrderData, OrderColumns, EventData, HandlerData } from '../interface/orderData';
+import { OrderService } from '../services/order.service';
 import { Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatPaginator} from '@angular/material/paginator';
+
+import { forkJoin, Observable, throwError, map, retry, catchError, Observer } from 'rxjs';
 
 @Component({
   selector: 'table-data',
@@ -13,28 +15,28 @@ import { MatPaginator} from '@angular/material/paginator';
   styleUrls: ['./table-data.component.scss'],
 })
 export class TableDataComponent {
-  displayedColumns: string[] = UserColumns.map((col) => col.key);
-  columnsSchema: any = UserColumns;
+  displayedColumns: string[] = OrderColumns.map((col) => col.key);
+  columnsSchema: any = OrderColumns;
 
   /**
    * get dataSource data from parent component
    */
-  @Input() dataSource = new MatTableDataSource<User>();
+  @Input() dataSource = new MatTableDataSource<OrderData>();
   @Output() reset = new EventEmitter<boolean>();
 
-  valid: any = {};
+  valid: Array<any> = [];
   is_disabled: boolean = false;
-  sortedData: User[];
+  sortedData: OrderData[];
 
   // Get paginator from view
   @ViewChild('paginator') paginator!: MatPaginator;
 
   /**
    * Creates an instance of table component.
-   * @param userService
+   * @param orderService
    * @param dialog
    */
-  constructor(private userService: UserService, public dialog: MatDialog) {
+  constructor(private orderService: OrderService, public dialog: MatDialog) {
     this.sortedData = this.dataSource.data.slice();
   }
 
@@ -61,7 +63,7 @@ export class TableDataComponent {
    * @param row
    * @return {void} returns nothing
    */
-  editRow(row: User) {
+  editRow(row: OrderData) {
     //New entry
     if (row.id === 0) {
         //Validating required data
@@ -70,7 +72,7 @@ export class TableDataComponent {
             this.is_disabled = true;
 
             // Showing error message
-            this.userService.showErrorMessage('The required fields could not Blank', 'Required!');
+            this.orderService.showErrorMessage('The required fields could not Blank', 'Required!');
             
         } else {
             if(this.dataSource.data) {
@@ -84,17 +86,17 @@ export class TableDataComponent {
 
                 if(is_unique) {
                     //Adding new entry
-                    this.userService.addUser(row).subscribe((response: any) => {
+                    this.orderService.addOrder(row).subscribe((response: OrderData) => {
                       if(response.success) {
 
                         // Showing success message
-                        this.userService.showSuccessMessage('Data added successfully', 'Added');
+                        this.orderService.showSuccessMessage('Data added successfully', 'Added');
 
                         // Table Data reseting after success
                         this.resetItem();
                       } else {
                         // Data add faled message showing
-                        this.userService.showErrorMessage('Data add failed', 'Failed!');
+                        this.orderService.showErrorMessage('Data add failed', 'Failed!');
                         
                       }
                         
@@ -103,22 +105,22 @@ export class TableDataComponent {
                 } else {
                     //Showing error message
                     this.is_disabled = true;
-                    this.userService.showErrorMessage('Item should be unique', 'Not Unique!');
+                    this.orderService.showErrorMessage('Item should be unique', 'Not Unique!');
                     
                 }
             }
         }
     } else {
         //Updating existing data
-        this.userService.updateUser(row).subscribe((response: any) => {
+        this.orderService.updateOrder(row).subscribe((response: OrderData) => {
           if(response.success) {
             // Showing update success message and data resetting
-            this.userService.showSuccessMessage('Data updated successfully', 'Updated');
+            this.orderService.showSuccessMessage('Data updated successfully', 'Updated');
             
             this.resetItem();
           } else {
             // Showing update failed message
-            this.userService.showErrorMessage('Data update failed', 'Failed!');
+            this.orderService.showErrorMessage('Data update failed', 'Failed!');
             
           }
         })
@@ -141,16 +143,16 @@ export class TableDataComponent {
         // If selected confirm
         if (confirm) {
           // Calls delete api
-          this.userService.deleteUser(id).subscribe((response: any) => {
+          this.orderService.deleteOrder(id).subscribe((response: OrderData) => {
             // Showing success and failed message
             if(response.success) {
               this.dataSource.data = this.dataSource.data.filter(
-                (u: User) => u.id !== id,
+                (u: OrderData) => u.id !== id,
               )
-              this.userService.showSuccessMessage('Data removed successfully', 'Deleted');
+              this.orderService.showSuccessMessage('Data removed successfully', 'Deleted');
               
             } else {
-              this.userService.showErrorMessage('Data remove failed', 'Failed!');
+              this.orderService.showErrorMessage('Data remove failed', 'Failed!');
               
             }
               
@@ -164,7 +166,7 @@ export class TableDataComponent {
    * @param row
    * @return {void} returns nothing
    */
-  cancelAddEditRow(row: User) {
+  cancelAddEditRow(row: OrderData) {
     this.resetItem();
   }
 
@@ -175,7 +177,7 @@ export class TableDataComponent {
    * @param key
    * @return {void} returns nothing
    */
-  inputHandler(e: any, id: number, key: string) {
+  inputHandler(e: HandlerData, id: number, key: string) {
     
     this.is_disabled = false;
     if (!this.valid[id]) {
@@ -218,7 +220,7 @@ export class TableDataComponent {
    * @param event
    * @return {void} returns nothing
    */
-  selectAll(event: any) {
+  selectAll(event: EventData) {
     this.dataSource.data = this.dataSource.data.map((item) => ({
       ...item,
       isSelected: event.checked,

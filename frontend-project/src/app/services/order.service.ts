@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, Observable, throwError, map, retry, catchError } from 'rxjs';
-import { User } from '../interface/userData';
+import { OrderData } from '../interface/orderData';
 import { environment } from 'src/environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
+export class OrderService {
   
   /**
    * Getting data from environment
@@ -25,49 +25,49 @@ export class UserService {
    * Gets csv data - To get all existing data from CSV
    * @returns csv data 
    */
-  getUsers(): Observable<User[]> {
+  getOrders(): Observable<OrderData[]> {
     return this.http
       .get(this.apiUrl)
-      .pipe<User[]>(map((data: any) => data.data))
+      .pipe<OrderData[]>(map((data: any) => data.data))
       .pipe(retry(1), catchError(this.handleError));
   }
 
   /**
    * Adds new entry in CSV
-   * @param user 
-   * @returns User 
+   * @param order 
+   * @returns OrderData 
    */
-  addUser(user: User): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}`, user);
+  addOrder(order: OrderData): Observable<OrderData> {
+    return this.http.post<OrderData>(`${this.apiUrl}`, order);
   }
 
   /**
    * To Update single data row
-   * @param user 
-   * @returns User 
+   * @param order 
+   * @returns OrderData 
    */
-  updateUser(user: User): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}`, user);
+  updateOrder(order: OrderData): Observable<OrderData> {
+    return this.http.patch<OrderData>(`${this.apiUrl}`, order);
   }
 
   /**
    * To delete single entry from CSV
    * @param id 
-   * @returns User 
+   * @returns OrderData 
    */
-  deleteUser(id: number): Observable<User> {
-    return this.http.delete<User>(`${this.apiUrl}${id}`);
+  deleteOrder(id: number): Observable<OrderData> {
+    return this.http.delete<OrderData>(`${this.apiUrl}${id}`);
   }
 
   /**
    * To delete multiple selected data from CSV
    * @param id 
-   * @returns User 
+   * @returns OrderData 
    */
-  deleteUsers(users: User[]): Observable<User[]> {
+  deleteOrders(order: OrderData[]): Observable<OrderData[]> {
     return forkJoin(
-      users.map((user) =>
-        this.http.delete<User>(`${this.apiUrl}${user.id}`)
+      order.map((order) =>
+        this.http.delete<OrderData>(`${this.apiUrl}${order.id}`)
       )
     );
   }

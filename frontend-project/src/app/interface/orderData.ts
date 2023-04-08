@@ -1,7 +1,7 @@
 /**
  * Data structure defined here
  */
-export interface User {
+export interface OrderData {
   isSelected: boolean;
   id: number;
   name: string;
@@ -11,12 +11,27 @@ export interface User {
   quantity: string;
   item: string;
   isEdit: boolean;
+  success: boolean;
+}
+
+/**
+ * Data structure defined for event
+ */
+export interface EventData {
+  checked: boolean;
+}
+
+/**
+ * Data structure defined for input handler
+ */
+export interface HandlerData {
+  target: any;
 }
 
 /**
  * Defining data validation and type
  */
-export const UserColumns = [
+export const OrderColumns = [
   {
     key: 'isSelected',
     type: 'isSelected',

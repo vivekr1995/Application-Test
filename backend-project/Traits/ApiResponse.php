@@ -16,7 +16,7 @@ trait ApiResponse
   public function getSuccessResponse($data, $status, $code)
   { 
     header("Content-type: application/json; charset=UTF-8");
-    echo json_encode(['success' =>$status,'data' => $data], $code);
+    echo json_encode(['success' =>$status,'data' => $data, 'code' => $code], $code);
   }
 
   

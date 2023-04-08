@@ -1,17 +1,17 @@
-import { UserService } from './user.service';
+import { OrderService } from './order.service';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 /**
  * Service Test
  */
-describe('UserService', () => {
-  let service: UserService;
+describe('OrderService', () => {
+  let service: OrderService;
   let fakeHttpClient: jasmine.SpyObj<HttpClient>;
   let fakeMatSnackBar: jasmine.SpyObj<MatSnackBar>;
 
   function createService() {
-    service = new UserService(
+    service = new OrderService(
       fakeHttpClient,
       fakeMatSnackBar
     );

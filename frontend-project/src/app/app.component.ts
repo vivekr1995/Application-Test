@@ -2,8 +2,8 @@ import { Component, DefaultIterableDiffer, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
-import { User } from './interface/userData';
-import { UserService } from './services/user.service';
+import { OrderData } from './interface/orderData';
+import { OrderService } from './services/order.service';
 
 @Component({
   selector: 'app-root',
@@ -14,15 +14,15 @@ export class AppComponent {
   /**
    * Defining table data structure
    */
-  dataSource = new MatTableDataSource<User>();
+  dataSource = new MatTableDataSource<OrderData>();
   title: string = 'GreenIT Application Challenge';
 
   /**
    * Creates an instance of app component.
    * @param dialog
-   * @param userService
+   * @param orderService
    */
-  constructor(public dialog: MatDialog, private userService: UserService) {}
+  constructor(public dialog: MatDialog, private orderService: OrderService) {}
 
   /**
    * Sets table data on load
@@ -39,7 +39,7 @@ export class AppComponent {
    * @return {void} returns nothing
    */
   resetData() {
-    this.userService.getUsers().subscribe((res : User[]) => {
+    this.orderService.getOrders().subscribe((res : OrderData[]) => {
       this.dataSource.data = res;
     })
   }
@@ -50,7 +50,7 @@ export class AppComponent {
    * @return {void} returns nothing
    */
   addRow() {
-    const newRow: User = {
+    const newRow: OrderData = {
       id: 0,
       name: '',
       state: '',
@@ -60,6 +60,7 @@ export class AppComponent {
       item: '',
       isEdit: true,
       isSelected: false,
+      success: true
     }
     this.dataSource.data = [newRow, ...this.dataSource.data]
   }
@@ -70,9 +71,9 @@ export class AppComponent {
    * @return {void} returns nothing
    */
   removeSelectedRows() {
-    const users = this.dataSource.data.filter((u: User) => u.isSelected)
+    const orders = this.dataSource.data.filter((u: OrderData) => u.isSelected)
     
-    if(users.length != 0) {
+    if(orders.length != 0) {
       // Shows confirmation dialog for selection
       this.dialog
       .open(ConfirmDialogComponent)
@@ -80,19 +81,19 @@ export class AppComponent {
       .subscribe((confirm) => {
         // If delete confirmed and shows messages
         if (confirm) {
-          this.userService.deleteUsers(users).subscribe(() => {
+          this.orderService.deleteOrders(orders).subscribe(() => {
             this.dataSource.data = this.dataSource.data.filter(
-              (u: User) => !u.isSelected,
+              (u: OrderData) => !u.isSelected,
             )
           })
 
-          this.userService.showSuccessMessage('Data removed successfully', 'Deleted');
+          this.orderService.showSuccessMessage('Data removed successfully', 'Deleted');
           
         }
       })
     } else {
       // Shows error messages
-      this.userService.showErrorMessage('Select any data', 'No data selected!');
+      this.orderService.showErrorMessage('Select any data', 'No data selected!');
       
     }
     
