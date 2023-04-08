@@ -7,8 +7,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatPaginator} from '@angular/material/paginator';
 
-import { forkJoin, Observable, throwError, map, retry, catchError, Observer } from 'rxjs';
-
 @Component({
   selector: 'table-data',
   templateUrl: './table-data.component.html',
